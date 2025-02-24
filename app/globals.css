@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* FullCalendar Modern Styles */
+.fc {
+  @apply font-sans;
+}
+
+.fc .fc-toolbar {
+  @apply mb-6;
+}
+
+.fc .fc-toolbar-title {
+  @apply text-2xl font-bold text-gray-800;
+}
+
+.fc .fc-button {
+  @apply bg-white text-gray-600 border border-gray-200 rounded-xl px-4 py-2 
+         hover:bg-gray-50 hover:border-gray-300 transition-colors duration-200
+         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.fc .fc-prev-button,
+.fc .fc-next-button {
+  @apply w-10 h-10 flex items-center justify-center p-0;
+}
+
+.fc-theme-standard td, 
+.fc-theme-standard th,
+.fc-theme-standard .fc-scrollgrid {
+  @apply border-gray-100;
+}
+
+.fc-day-today {
+  @apply bg-blue-50/50 !important;
+}
+
+.fc-event {
+  @apply rounded-lg shadow-sm border-0 cursor-pointer transition-all duration-200
+         hover:shadow-md hover:scale-[1.02];
+}
+
+.fc .fc-daygrid-day-frame {
+  @apply hover:bg-gray-50/50 transition-colors duration-200;
+}
+
+.fc .fc-daygrid-day-number {
+  @apply text-sm text-gray-600 font-medium p-3;
+}
+
+.fc .fc-col-header-cell {
+  @apply py-3;
+}
+
+.fc .fc-col-header-cell-cushion {
+  @apply text-sm font-semibold text-gray-700;
+}
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-end {
+  @apply mr-1;
+}
+
+.fc-direction-ltr .fc-daygrid-event.fc-event-start {
+  @apply ml-1;
+}
+
+.fc .fc-more-link {
+  @apply text-xs font-medium text-gray-500 hover:text-gray-700;
+}
+
+/* FullCalendar Dark Mode Styles */
+.dark .fc {
+  @apply text-gray-100;
+}
+
+.dark .fc .fc-toolbar-title {
+  @apply text-gray-100;
+}
+
+.dark .fc .fc-button {
+  @apply bg-gray-700 hover:bg-gray-600 border-gray-600;
+}
+
+.dark .fc .fc-button-primary:not(:disabled).fc-button-active,
+.dark .fc .fc-button-primary:not(:disabled):active {
+  @apply bg-gray-600;
+}
+
+.dark .fc-theme-standard td, 
+.dark .fc-theme-standard th,
+.dark .fc-theme-standard .fc-scrollgrid {
+  @apply border-gray-700;
+}
+
+.dark .fc-day-today {
+  @apply bg-gray-700 !important;
+}
+
+.dark .fc-daygrid-day-number {
+  @apply text-gray-300;
+}
+
+.dark .fc-col-header-cell-cushion {
+  @apply text-gray-300;
+}
+
+.dark .fc-daygrid-day:not(.fc-day-today) {
+  @apply bg-gray-800;
+}
+
+.dark .fc .fc-col-header {
+  @apply bg-gray-800;
+}
+
+.dark .fc-col-header-cell {
+  @apply bg-gray-800;
+}
+
+.dark .fc-event {
+  @apply shadow-md;
+}
+
+.dark .fc .fc-highlight {
+  @apply bg-gray-700;
+}
