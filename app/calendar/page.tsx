@@ -39,6 +39,10 @@ export default function CalendarPage() {
   const [showModal, setShowModal] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null)
+  const [isClientLoaded, setIsClientLoaded] = useState(false)
+
+  // Calculate calendar height based on screen size
+  const [calendarHeight, setCalendarHeight] = useState('auto')
 
   useEffect(() => {
     const initializePage = async () => {
@@ -61,6 +65,26 @@ export default function CalendarPage() {
 
     initializePage()
   }, [router])
+
+  useEffect(() => {
+    setIsClientLoaded(true)
+  }, [])
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (window.innerWidth < 768) { // mobile
+        // Subtract header (64px) and bottom nav (76px) plus padding
+        const availableHeight = window.innerHeight - 64 - 76 - 32 // 32px for padding
+        setCalendarHeight(`${availableHeight}px`)
+      } else {
+        setCalendarHeight('auto')
+      }
+    }
+
+    updateHeight()
+    window.addEventListener('resize', updateHeight)
+    return () => window.removeEventListener('resize', updateHeight)
+  }, [])
 
   const fetchBookings = async (houseId: string) => {
     const { data, error } = await supabase
@@ -156,20 +180,14 @@ export default function CalendarPage() {
     await fetchBookings(houseId!)
   }
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-xl text-gray-600">Loading calendar...</div>
-      </div>
-    )
+  if (!isClientLoaded) {
+    return null
   }
 
   return (
     <DashboardLayout>
-      <div className="p-4 md:p-8">
-        <div className="max-w-7xl mx-auto bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Family House Calendar</h1>
-          
+      <div className="p-4">
+        <div className="max-w-7xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-6">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
@@ -200,15 +218,16 @@ export default function CalendarPage() {
             dayMaxEvents={3}
             eventDisplay="block"
             eventContent={eventInfo => (
-              <div className="p-1">
+              <div className="p-1 min-w-0 w-full">
                 <div className="text-xs font-semibold truncate dark:text-white">
                   {eventInfo.event.title}
                 </div>
-                <div className="text-xs opacity-75 dark:text-gray-300">
+                <div className="text-xs truncate opacity-75 dark:text-gray-300">
                   Visitors: {eventInfo.event.extendedProps.visitors}
                 </div>
               </div>
             )}
+            eventClassNames="overflow-hidden"
           />
         </div>
       </div>

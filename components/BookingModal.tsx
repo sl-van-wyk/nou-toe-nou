@@ -29,25 +29,28 @@ export default function BookingModal({
   const [visitors, setVisitors] = useState(booking?.visitors || 1)
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-8 rounded-2xl max-w-md w-full shadow-xl" onClick={e => e.stopPropagation()}>
-        <h2 className="text-2xl font-bold mb-6">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-40">
+      <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl max-w-md w-full shadow-xl" onClick={e => e.stopPropagation()}>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           {booking ? 'Edit Booking' : 'New Booking'}
         </h2>
         
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Family Member
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+              User
             </label>
             <select
-              className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               value={userId}
               onChange={(e) => setUserId(Number(e.target.value))}
+              className="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 
+                       bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                       focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
             >
-              <option value="">Select a family member</option>
+              <option value="">Select a user</option>
               {users.map(user => (
-                <option key={user.id} value={user.id}>
+                <option key={user.id} value={user.id} className="text-gray-900 dark:text-white">
                   {user.name}
                 </option>
               ))}
@@ -55,58 +58,71 @@ export default function BookingModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Start Date
             </label>
             <input
               type="date"
-              className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 
+                       bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                       focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               End Date
             </label>
             <input
               type="date"
-              className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
+              className="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 
+                       bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                       focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
               Number of Visitors
             </label>
             <input
               type="number"
               min="1"
-              className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               value={visitors}
               onChange={(e) => setVisitors(Number(e.target.value))}
+              className="w-full px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 
+                       bg-white dark:bg-gray-700 text-gray-900 dark:text-white
+                       focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
             />
           </div>
         </div>
 
-        <div className="mt-6 flex justify-end space-x-3">
+        <div className="mt-6 flex justify-end gap-3">
           {booking && onDelete && (
             <button
               onClick={() => {
                 onDelete(booking.id)
                 onClose()
               }}
-              className="px-4 py-2 rounded-xl border border-red-300 text-red-700 hover:bg-red-50"
+              className="px-4 py-2 rounded-xl border border-red-300 dark:border-red-500
+                       text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/20
+                       transition-colors"
             >
               Delete
             </button>
           )}
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-50"
+            className="px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-600
+                     text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700
+                     transition-colors"
           >
             Cancel
           </button>
@@ -121,7 +137,9 @@ export default function BookingModal({
                 })
               }
             }}
-            className="px-4 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-700"
+            className="px-4 py-2 rounded-xl bg-blue-600 text-white
+                     hover:bg-blue-700 dark:hover:bg-blue-500
+                     transition-colors"
           >
             {booking ? 'Save Changes' : 'Book'}
           </button>
