@@ -186,8 +186,8 @@ export default function CalendarPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4">
-        <div className="max-w-7xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-6">
+      <div className="p-4 flex items-center min-h-[calc(100vh-144px)]"> {/* 144px accounts for header (64px) + bottom nav (80px) */}
+        <div className="max-w-7xl mx-auto w-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 sm:p-6">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"

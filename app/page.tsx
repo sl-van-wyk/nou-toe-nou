@@ -26,7 +26,13 @@ export default function LoginPage() {
       return
     }
 
+    // Clear existing house data before setting new
+    localStorage.removeItem('house_name')
+    
+    // Set new house data
     localStorage.setItem('house_id', data.id)
+    localStorage.setItem('house_name', data.house_name)
+    
     router.push('/calendar')
   }
 

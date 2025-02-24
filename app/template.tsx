@@ -41,13 +41,43 @@ const icons = {
 export default function Template({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
-  const [houseName, setHouseName] = useState(() => localStorage.getItem('house_name') || '')
+  const [houseName, setHouseName] = useState('')
   const [isDark, setIsDark] = useState(false)
 
   // Skip navigation for login page
   if (pathname === '/') {
     return <>{children}</>
   }
+
+  useEffect(() => {
+    const storedHouseName = localStorage.getItem('house_name')
+    const houseId = localStorage.getItem('house_id')
+
+    if (!houseId) {
+      router.push('/')
+      return
+    }
+
+    if (storedHouseName) {
+      setHouseName(storedHouseName)
+    } else {
+      // Fetch house name if not in localStorage
+      const fetchHouseName = async () => {
+        const { data } = await supabase
+          .from('houses')
+          .select('house_name')
+          .eq('id', houseId)
+          .single()
+
+        if (data) {
+          setHouseName(data.house_name)
+          localStorage.setItem('house_name', data.house_name)
+        }
+      }
+
+      fetchHouseName()
+    }
+  }, [router, pathname])
 
   useEffect(() => {
     const isDarkMode = localStorage.getItem('darkMode') === 'true'
@@ -64,30 +94,11 @@ export default function Template({ children }: { children: React.ReactNode }) {
     document.documentElement.classList.toggle('dark')
   }
 
-  useEffect(() => {
-    const fetchHouseName = async () => {
-      if (houseName) return
-
-      const houseId = localStorage.getItem('house_id')
-      if (!houseId) {
-        router.push('/')
-        return
-      }
-
-      const { data } = await supabase
-        .from('houses')
-        .select('house_name')
-        .eq('id', houseId)
-        .single()
-
-      if (data) {
-        setHouseName(data.house_name)
-        localStorage.setItem('house_name', data.house_name)
-      }
-    }
-
-    fetchHouseName()
-  }, [router, houseName])
+  const handleLogout = () => {
+    localStorage.removeItem('house_id')
+    localStorage.removeItem('house_name')
+    router.push('/')
+  }
 
   const navItems = [
     { path: '/calendar', label: 'Calendar', icon: icons.calendar },
@@ -104,13 +115,31 @@ export default function Template({ children }: { children: React.ReactNode }) {
             <h1 className="text-xl font-bold text-gray-800 dark:text-white truncate">
               {houseName}
             </h1>
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-              aria-label="Toggle dark mode"
-            >
-              {isDark ? icons.lightMode : icons.darkMode}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleLogout}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 
+                         text-gray-600 dark:text-gray-300 
+                         hover:bg-gray-200 dark:hover:bg-gray-600 
+                         transition-colors"
+                aria-label="Logout"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </button>
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 
+                         text-gray-600 dark:text-gray-300 
+                         hover:bg-gray-200 dark:hover:bg-gray-600 
+                         transition-colors"
+                aria-label="Toggle dark mode"
+              >
+                {isDark ? icons.lightMode : icons.darkMode}
+              </button>
+            </div>
           </div>
         </div>
       </header>
